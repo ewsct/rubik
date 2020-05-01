@@ -8,6 +8,7 @@ set -e
 WORKDIR=${PWD}/.workdir
 SSH_PUBLIC_KEY_FILE=${PUBLIC_KEY_FILE:-${HOME}/.ssh/id_rsa.pub}
 CENTOS_USERNAME=centos
+IP_PREFIX="192.168.122"
 
 # Master configuration
 CENTOS_MASTER_COUNT=${MASTER_COUNT:-3}
@@ -154,7 +155,7 @@ vm_ip() {
     local prefix=${2}
     local start_ip=$([ "${prefix}" = "master" ] && echo "100" || echo "200")
     local last_octet=$(expr ${start_ip} + ${num})
-    local ip_prefix=${IP_PREFIX:-192.168.122}
+    local ip_prefix=${IP_PREFIX}
     local ip_addr=${ip_prefix}.${last_octet}
     echo ${ip_addr}    
 }
@@ -219,7 +220,13 @@ inventory() {
                   awk '{print $5}' | awk -F'/' '{print "\"" $1 "\","}')
           echo "\"${prefix}\":" '{"hosts" : ['
           [ -n "${hosts}" ] && echo "${hosts%?}"
-          echo ']}')
+          echo '],'
+          echo '"vars": {'
+          echo '"ansible_ssh_user":' "\"${CENTOS_USERNAME}\"," 
+          echo '"ansible_ssh_extra_args": "-o StrictHostKeyChecking=no"'
+          echo '"master_load_balancer": ' "\"${IP_PREFIX}.50\""
+          echo "} }"
+          )
      done
      echo "${groups} }"
 }
@@ -258,7 +265,7 @@ Example:
 
 case $1 in
   inv)
-    inventory | jq .
+    inventory
     ;;
   up)
     up
