@@ -1,0 +1,4 @@
+ca_dir: "/etc/certificates"
+ca:
+  crt: "ca.pem"
+  key: "key.pem"

@@ -1,0 +1,24 @@
+---
+- name: "Prepare | Packages | Add additional repos"
+  yum_repository:
+    name: "{{ item.name }}"
+    description: "{{ item.description }}"
+    baseurl: "{{ item.url }}"
+    gpgkey: "{{ item.gpgkey }}"
+  loop: "{{ additional_repos }}"
+  become: yes
+
+
+- name: "Prepare | Packages | Update packages"
+  yum:
+    name: "*"
+    state: latest
+  become: yes
+
+
+- name: "Prepare | Packages | Install packages"
+  yum:
+    name: "{{ packages }}"
+    state: present
+  become: yes
+

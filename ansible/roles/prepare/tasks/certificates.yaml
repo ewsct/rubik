@@ -1,0 +1,10 @@
+---
+- name: "Prepare | Certificates | Admin Client Certificate"
+  cert:
+    ca_key: "{{ ca_dir }}/{{ ca.key }}"
+    ca_certificate: "{{ ca_dir }}/{{ ca.crt }}"
+    certificate: "{{ cert.dir }}/{{ cert.admin.crt }}"
+    key: "{{ cert.dir }}/{{ cert.admin.key }}"
+    common_name: 'rubik'
+    state: updated
+  become: yes

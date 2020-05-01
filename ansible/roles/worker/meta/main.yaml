@@ -1,0 +1,12 @@
+---
+galaxy_info:
+  role_name: worker
+  author: andrii.bilorus@gmail.com
+  description: Prepare Kubernetes worker nodes
+  license: GPLv2
+  min_ansible_version: 2.8
+  platforms:
+  - name: unix-like os
+dependencies:
+- role: ca
+- role: prepare

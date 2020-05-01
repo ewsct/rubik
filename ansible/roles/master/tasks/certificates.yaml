@@ -1,0 +1,61 @@
+---
+- name: 'Master | Cerificates |  Controller Manager Client Certificates'
+  cert:
+    ca_key: "{{ ca_dir }}/{{ ca.key }}"
+    ca_certificate: "{{ ca_dir }}/{{ ca.crt }}"
+    certificate: "{{ cert.dir }}/{{ cert.controller.crt }}"
+    key: "{{ cert.dir }}/{{ cert.controller.key }}"
+    common_name: 'system:kube-controller-manager'
+    state: updated
+  become: yes
+
+- name: 'Master | Cerificates | Proxy Client Certificates'
+  cert:
+    ca_key: "{{ ca_dir }}/{{ ca.key }}"
+    ca_certificate: "{{ ca_dir }}/{{ ca.crt }}"
+    certificate: "{{ cert.dir }}/{{ cert.proxy.crt }}"
+    key: "{{ cert.dir }}/{{ cert.proxy.key }}"
+    common_name: 'system:kube-proxy'
+    state: updated
+  become: yes
+
+- name: 'Master | Cerificates | Scheduler Client Certificates'
+  cert:
+    ca_key: "{{ ca_dir }}/{{ ca.key }}"
+    ca_certificate: "{{ ca_dir }}/{{ ca.crt }}"
+    certificate: "{{ cert.dir }}/{{ cert.scheduler.crt }}"
+    key: "{{ cert.dir }}/{{ cert.scheduler.key }}"
+    common_name: 'system:kube-scheduler'
+    state: updated
+  become: yes
+
+- name: 'Master | Cerificates | Kubernetes API Server Certificates'
+  cert:
+    ca_key: "{{ ca_dir }}/{{ ca.key }}"
+    ca_certificate: "{{ ca_dir }}/{{ ca.crt }}"
+    certificate: "{{ cert.dir }}/{{ cert.kubernetes_api.crt }}"
+    key: "{{ cert.dir }}/{{ cert.kubernetes_api.key }}"
+    common_name: 'rubik'
+    hostnames: '{{ ansible_nodename }},{{ ansible_all_ipv4_addresses | join(",") }},{{ kubernetes_hostnames }}'
+    state: updated
+  become: yes
+
+- name: 'Master | Cerificates | Scheduler Client Certificates'
+  cert:
+    ca_key: "{{ ca_dir }}/{{ ca.key }}"
+    ca_certificate: "{{ ca_dir }}/{{ ca.crt }}"
+    certificate: "{{ cert.dir }}/{{ cert.scheduler.crt }}"
+    key: "{{ cert.dir }}/{{ cert.scheduler.key }}"
+    common_name: 'system:kube-scheduler'
+    state: updated
+  become: yes
+
+- name: 'Master | Cerificates | Service Account Key Pair'
+  cert:
+    ca_key: "{{ ca_dir }}/{{ ca.key }}"
+    ca_certificate: "{{ ca_dir }}/{{ ca.crt }}"
+    certificate: "{{ cert.dir }}/{{ cert.service_accounts.crt }}"
+    key: "{{ cert.dir }}/{{ cert.service_accounts.key }}"
+    common_name: 'service-accounts'
+    state: updated
+  become: yes

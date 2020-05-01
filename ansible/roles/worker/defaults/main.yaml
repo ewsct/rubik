@@ -1,0 +1,7 @@
+---
+cert:
+  dir: "/etc/certificates"
+  kubelet:
+    crt: "worker.pem"
+    key: "worker-key.pem"
+  

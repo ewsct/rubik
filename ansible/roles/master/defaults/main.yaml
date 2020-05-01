@@ -1,0 +1,23 @@
+---
+cert:
+  dir: "/etc/certificates"
+  admin:
+    crt: "worker.pem"
+    key: "worker-key.pem"
+  controller:
+    crt: 'kube-controller-manager.pem'
+    key: 'kube-controller-manager-key.pem'
+  proxy:
+    crt: 'proxy.pem'
+    key: 'proxy-key.pem'
+  scheduler:
+    crt: 'kube-scheduler.pem'
+    key: 'kube-scheduler-key.pem'
+  kubernetes_api:
+    crt: 'kubernetes.pem'
+    key: 'kubernetes-key.pem'
+  service_accounts:
+    crt: 'service-account.pem'
+    key: 'service-account-key.pem'
+
+kubernetes_hostnames: 'kubernetes,kubernetes.default,kubernetes.default.svc,kubernetes.default.svc.cluster,kubernetes.svc.cluster.local'

@@ -1,0 +1,10 @@
+---
+- name: 'Worker | Cerificates | Kubelet Client Certificates'
+  cert:
+    ca_key: "{{ ca_dir }}/{{ ca.key }}"
+    ca_certificate: "{{ ca_dir }}/{{ ca.crt }}"
+    certificate: "{{ cert.dir }}/{{ cert.kubelet.crt }}"
+    key: "{{ cert.dir }}/{{ cert.kubelet.key }}"
+    common_name: 'system:node:{{ ansible_nodename }}'
+    state: updated
+  become: yes
