@@ -1,2 +1,6 @@
 .DS_Store
 libvirt/.workdir
+
+**/venv
+*.pem
+.vscode
