@@ -2,6 +2,7 @@
 cert:
   dir: "/etc/certificates"
   kubelet:
-    crt: "worker.pem"
+    cert: "worker.pem"
     key: "worker-key.pem"
   
+kubeconfig_location: '/etc/kubeconfig-worker.yaml'

@@ -2,9 +2,25 @@
 - name: 'Worker | Cerificates | Kubelet Client Certificates'
   cert:
     ca_key: "{{ ca_dir }}/{{ ca.key }}"
-    ca_certificate: "{{ ca_dir }}/{{ ca.crt }}"
-    certificate: "{{ cert.dir }}/{{ cert.kubelet.crt }}"
+    ca_certificate: "{{ ca_dir }}/{{ ca.cert }}"
+    certificate: "{{ cert.dir }}/{{ cert.kubelet.cert }}"
     key: "{{ cert.dir }}/{{ cert.kubelet.key }}"
     common_name: 'system:node:{{ ansible_nodename }}'
-    state: updated
+    #state: updated
   become: yes
+  register: kubelet_keypair
+
+- name: 'Worker | Cerificates | Kubelet Kubernetes Configuration File'
+  template:
+    src: kubeconfig.yaml
+    dest: '{{ kubeconfig_location }}'
+  become: yes
+  vars:
+    api_server: '{{ master_load_balancer }}'
+    ca_authority: '{{ ca_pair.cert | b64encode }}'
+    cluster_name: 'rubik'
+    user: 'system:node:{{ ansible_nodename }}'
+    client_cert: '{{ kubelet_keypair.cert | b64encode }}'
+    client_key: '{{ kubelet_keypair.key | b64encode }}'
+    
+    
