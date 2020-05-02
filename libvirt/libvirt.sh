@@ -223,7 +223,7 @@ inventory() {
           echo '],'
           echo '"vars": {'
           echo '"ansible_ssh_user":' "\"${CENTOS_USERNAME}\"," 
-          echo '"ansible_ssh_extra_args": "-o StrictHostKeyChecking=no"'
+          echo '"ansible_ssh_extra_args": "-o StrictHostKeyChecking=no",'
           echo '"master_load_balancer": ' "\"${IP_PREFIX}.50\""
           echo "} }"
           )
