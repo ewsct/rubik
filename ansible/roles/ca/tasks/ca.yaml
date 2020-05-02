@@ -1,13 +1,13 @@
 ---
 - name: "Prepare | Certificates | Root CA"
   ca:
-    cert_file: "{{ ca.crt }}"
+    cert_file: "{{ ca.cert }}"
     key_file: "{{ ca.key }}"
     config:
       C: nl
       CN: kube
   delegate_to: localhost
-  #register: ca
+  register: ca_pair
   run_once: yes
 
 
@@ -27,6 +27,6 @@
 
 - name: "Prepare | Certificates | Copy Root CA cert"
   copy:
-    src: "{{ ca.crt }}"
-    dest: "{{ ca_dir }}/{{ ca.crt }}"
+    src: "{{ ca.cert }}"
+    dest: "{{ ca_dir }}/{{ ca.cert }}"
   become: yes

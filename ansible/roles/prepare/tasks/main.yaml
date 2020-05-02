@@ -1,6 +1,3 @@
 ---
-- name: "Prepare | Certificates"
-  include: certificates.yaml
-
 - name: "Prepare | Packages"
   include: packages.yaml

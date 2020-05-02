@@ -4,3 +4,5 @@
   roles:
   - worker
   - master
+  vars:
+    cluster_name: 'rubik'

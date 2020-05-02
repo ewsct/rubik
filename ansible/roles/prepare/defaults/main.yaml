@@ -10,9 +10,4 @@ packages:
 - device-mapper-persistent-data
 - lvm2
 - containerd.io
-
-cert:
-  dir: "/etc/certificates"
-  admin:
-    crt: "admin.pem"
-    key: "admin-key.pem"
+- keepalived
