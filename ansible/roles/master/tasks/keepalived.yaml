@@ -1,0 +1,12 @@
+---
+- name: 'Master | Keepalived | Configuration'
+  template:
+    src: keepalived.conf
+    dest: '{{ vrrp.config_location }}'
+    mode: '0644'
+  become: yes
+  vars:
+    vrrp_priority: '{{ ansible_default_ipv4.address | vrrp_priority }}'
+    virtual_ip_address: '{{ master_load_balancer }}'
+  notify:
+  - 'Master | Keepalived | Reload configuration'

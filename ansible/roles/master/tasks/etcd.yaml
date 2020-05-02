@@ -1,0 +1,52 @@
+---
+- name: 'Master | Etcd | Distribution directories'
+  file:
+    state: 'directory'
+    path: '{{ item }}'
+    mode: 0777
+  become: yes
+  loop: 
+    - '{{ etcd.dir }}'
+    - '{{ etcd.bin_dir }}'
+    - '{{ etcd.lib_dir }}'
+
+- name: 'Master | Etcd | Binaries'
+  unarchive:
+    src: '{{ etcd.url }}'
+    dest: '{{ etcd.dir }}'
+    remote_src: yes
+  become: yes
+
+- name: 'Master | Etcd | Link to etcd binary'
+  file:
+    state: link
+    src: '{{ etcd.dist_dir }}/etcd'
+    dest: '{{ etcd.binary }}'
+  become: yes
+
+- name: 'Master | Etcd | Link to etcdctl binary'
+  file:
+    state: link
+    src: '{{ etcd.dist_dir }}/etcdctl'
+    dest: '{{ etcd.ctl_binary }}'
+  become: yes
+
+- name: 'Master | Etcd | Systemd file'
+  template:
+    src: 'etcd.service'
+    dest: '/etc/systemd/system/etcd.service'
+  become: yes
+  vars:
+    init_cluster: '{{ groups["master"] | etcd_initial_cluster }}'
+  notify:
+  - 'Master | Reload systemd daemons'
+
+- name: 'Master | Etcd | Systemd daemons'
+  meta: flush_handlers
+
+- name: 'Master | Etcd | Systemd service runs'
+  systemd:
+    name: etcd
+    state: started
+    enabled: yes
+  become: yes

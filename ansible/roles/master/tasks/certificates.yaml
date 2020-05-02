@@ -1,60 +1,75 @@
 ---
+- name: "Master | Certificates | Admin Client Certificate"
+  cert:
+    ca_key: "{{ ca_dir }}/{{ ca.key }}"
+    ca_certificate: "{{ ca_dir }}/{{ ca.cert }}"
+    certificate: "{{ cert.dir }}/{{ cert.admin.cert }}"
+    key: "{{ cert.dir }}/{{ cert.admin.key }}"
+    common_name: 'rubik'
+    state: updated
+  register: admin_manager_pair
+  become: yes
+
 - name: 'Master | Cerificates |  Controller Manager Client Certificates'
   cert:
     ca_key: "{{ ca_dir }}/{{ ca.key }}"
-    ca_certificate: "{{ ca_dir }}/{{ ca.crt }}"
-    certificate: "{{ cert.dir }}/{{ cert.controller.crt }}"
+    ca_certificate: "{{ ca_dir }}/{{ ca.cert }}"
+    certificate: "{{ cert.dir }}/{{ cert.controller.cert }}"
     key: "{{ cert.dir }}/{{ cert.controller.key }}"
     common_name: 'system:kube-controller-manager'
-    state: updated
+    state: present
+  register: controller_manager_pair
   become: yes
 
 - name: 'Master | Cerificates | Proxy Client Certificates'
   cert:
     ca_key: "{{ ca_dir }}/{{ ca.key }}"
-    ca_certificate: "{{ ca_dir }}/{{ ca.crt }}"
-    certificate: "{{ cert.dir }}/{{ cert.proxy.crt }}"
+    ca_certificate: "{{ ca_dir }}/{{ ca.cert }}"
+    certificate: "{{ cert.dir }}/{{ cert.proxy.cert }}"
     key: "{{ cert.dir }}/{{ cert.proxy.key }}"
     common_name: 'system:kube-proxy'
-    state: updated
+    #state: updated
+  register: kube_proxy_keypair
   become: yes
 
 - name: 'Master | Cerificates | Scheduler Client Certificates'
   cert:
     ca_key: "{{ ca_dir }}/{{ ca.key }}"
-    ca_certificate: "{{ ca_dir }}/{{ ca.crt }}"
-    certificate: "{{ cert.dir }}/{{ cert.scheduler.crt }}"
+    ca_certificate: "{{ ca_dir }}/{{ ca.cert }}"
+    certificate: "{{ cert.dir }}/{{ cert.scheduler.cert }}"
     key: "{{ cert.dir }}/{{ cert.scheduler.key }}"
     common_name: 'system:kube-scheduler'
     state: updated
+  register: kube_scheduler_keypair
   become: yes
 
 - name: 'Master | Cerificates | Kubernetes API Server Certificates'
   cert:
     ca_key: "{{ ca_dir }}/{{ ca.key }}"
-    ca_certificate: "{{ ca_dir }}/{{ ca.crt }}"
-    certificate: "{{ cert.dir }}/{{ cert.kubernetes_api.crt }}"
+    ca_certificate: "{{ ca_dir }}/{{ ca.cert }}"
+    certificate: "{{ cert.dir }}/{{ cert.kubernetes_api.cert }}"
     key: "{{ cert.dir }}/{{ cert.kubernetes_api.key }}"
     common_name: 'rubik'
-    hostnames: '{{ ansible_nodename }},{{ ansible_all_ipv4_addresses | join(",") }},{{ kubernetes_hostnames }}'
+    hostnames: '{{ ansible_all_ipv4_addresses + kubernetes_hostnames + [ansible_nodename, master_load_balancer, "127.0.0.1"] }}'
     state: updated
   become: yes
 
 - name: 'Master | Cerificates | Scheduler Client Certificates'
   cert:
     ca_key: "{{ ca_dir }}/{{ ca.key }}"
-    ca_certificate: "{{ ca_dir }}/{{ ca.crt }}"
-    certificate: "{{ cert.dir }}/{{ cert.scheduler.crt }}"
+    ca_certificate: "{{ ca_dir }}/{{ ca.cert }}"
+    certificate: "{{ cert.dir }}/{{ cert.scheduler.cert }}"
     key: "{{ cert.dir }}/{{ cert.scheduler.key }}"
     common_name: 'system:kube-scheduler'
     state: updated
+  register: kube_scheduler_keypair
   become: yes
 
 - name: 'Master | Cerificates | Service Account Key Pair'
   cert:
     ca_key: "{{ ca_dir }}/{{ ca.key }}"
-    ca_certificate: "{{ ca_dir }}/{{ ca.crt }}"
-    certificate: "{{ cert.dir }}/{{ cert.service_accounts.crt }}"
+    ca_certificate: "{{ ca_dir }}/{{ ca.cert }}"
+    certificate: "{{ cert.dir }}/{{ cert.service_accounts.cert }}"
     key: "{{ cert.dir }}/{{ cert.service_accounts.key }}"
     common_name: 'service-accounts'
     state: updated

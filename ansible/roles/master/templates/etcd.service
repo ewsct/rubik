@@ -1,0 +1,29 @@
+[Unit]
+Description=etcd
+Documentation=https://github.com/coreos
+
+[Service]
+Type=notify
+ExecStart={{ etcd.binary }} \
+  --name {{ ansible_nodename }} \
+  --cert-file={{ cert.dir }}/{{ cert.kubernetes_api.cert }} \
+  --key-file={{ cert.dir }}/{{ cert.kubernetes_api.key }} \
+  --peer-cert-file={{ cert.dir }}/{{ cert.kubernetes_api.cert }} \
+  --peer-key-file={{ cert.dir }}/{{ cert.kubernetes_api.key }} \
+  --trusted-ca-file={{ ca_dir }}/{{ ca.cert }} \
+  --peer-trusted-ca-file={{ ca_dir }}/{{ ca.cert }} \
+  --peer-client-cert-auth \
+  --client-cert-auth \
+  --initial-advertise-peer-urls https://{{ ansible_default_ipv4.address }}:2380 \
+  --listen-peer-urls https://{{ ansible_default_ipv4.address }}:2380 \
+  --listen-client-urls https://{{ ansible_default_ipv4.address }}:2379,https://127.0.0.1:2379 \
+  --advertise-client-urls https://{{ ansible_default_ipv4.address }}:2379 \
+  --initial-cluster-token etcd-cluster-0 \
+  --initial-cluster {{ init_cluster }} \
+  --initial-cluster-state new \
+  --data-dir={{ etcd.lib_dir }}
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

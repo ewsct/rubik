@@ -1,0 +1,12 @@
+---
+- name: 'Master | Keepalived | Reload configuration'
+  systemd:
+    name: 'keepalived'
+    state: reloaded
+    enabled: yes
+  become: yes
+
+- name: 'Master | Reload systemd daemons'
+  systemd:
+    daemon_reload: yes
+  become: yes

@@ -9,4 +9,4 @@ galaxy_info:
   - name: unix-like os
 dependencies:
 - role: ca
-- role: prepare
+# - role: prepare

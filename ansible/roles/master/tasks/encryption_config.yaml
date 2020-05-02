@@ -1,0 +1,8 @@
+---
+- name: 'Master | Encryption config | Config file'
+  template:
+    src: 'encryption_config.yaml'
+    dest: '{{ encryption_config.location }}'
+  become: yes
+  vars:
+    encryption_key: "{{ kube_encryption_key | default(master_load_balancer | hash('md5')) | b64encode }}"

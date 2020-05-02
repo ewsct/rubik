@@ -1,3 +1,15 @@
 ---
 - name: 'Master | Certificates'
   include: certificates.yaml
+
+- name: 'Master | Keepalived'
+  include: keepalived.yaml
+
+- name: 'Master | Kubeconfig'
+  include: kubeconfig.yaml
+
+- name: 'Master | Encryption config'
+  include: encryption_config.yaml
+
+- name: 'Master | Etcd'
+  include: etcd.yaml
