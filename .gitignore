@@ -4,3 +4,4 @@ libvirt/.workdir
 **/venv
 *.pem
 .vscode
+*.pyc
