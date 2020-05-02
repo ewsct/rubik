@@ -37,16 +37,27 @@ def main():
   hostnames = module.params['hostnames']
   updated = True if module.params['state'] == 'updated' else False
 
-  stdout = ''
-
   if not isfile(key) or not isfile(cert) or updated:
     changed = True
-    stdout = make_certs(key, cert, ca_key, ca_cert, common_name=common_name, hostnames=hostnames)
-  
+    output = make_certs(key, cert, ca_key, ca_cert, common_name=common_name, hostnames=hostnames)
+  else:
+    output = {
+      'cert': read_from_file(cert),
+      'key': read_from_file(key)
+    }
+
   module.exit_json(
     changed=changed,
-    cfsslout=stdout,
+    key=output['key'],
+    cert=output['cert']
   )
+  
+def read_from_file(filename):
+  '''
+  Read and return file content
+  '''
+  with open(filename, "rt") as f:
+    return f.read()
   
 
 def get_link(op_sys, arch):
@@ -97,7 +108,7 @@ def make_certs(key_path, cert_path, ca_key, ca_cert, common_name=None, hostnames
   save_to_file(cert_path, new_cert)
   save_to_file(key_path, new_key)
 
-  return stdout
+  return output
 
 
 def config_file(config_path, cn, names=[{}]):
