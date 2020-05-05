@@ -1,0 +1,7 @@
+---
+- name: 'Worker | Containerd | Reload configuration'
+  systemd:
+    name: 'containerd'
+    state: reloaded
+    enabled: yes
+  become: yes

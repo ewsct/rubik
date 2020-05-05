@@ -13,3 +13,6 @@
 
 - name: 'Master | Etcd'
   include: etcd.yaml
+
+- name: 'Master | Control plane'
+  include: control_plane.yaml

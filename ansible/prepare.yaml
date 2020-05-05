@@ -2,7 +2,8 @@
 - name: Prepare
   hosts: all
   roles:
-  - worker
   - master
+  - worker
   vars:
     cluster_name: 'rubik'
+    k8s_version: 'v1.15.3'

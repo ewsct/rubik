@@ -7,7 +7,7 @@
     key: "{{ cert.dir }}/{{ cert.admin.key }}"
     common_name: 'rubik'
     state: updated
-  register: admin_manager_pair
+  register: admin_pair
   become: yes
 
 - name: 'Master | Cerificates |  Controller Manager Client Certificates'

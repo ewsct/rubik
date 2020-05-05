@@ -22,3 +22,7 @@
     state: present
   become: yes
 
+- name: 'Prepare | Packages  | Kubernetes pip modules'
+  pip:
+    name: '{{ pip_packages }}'
+  become: yes

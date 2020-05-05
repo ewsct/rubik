@@ -1,0 +1,83 @@
+---
+- name: 'Worker | Bootstrap | Directories'
+  file:
+    recurse: yes
+    path: '{{ item }}'
+    state: directory
+    mode: '0755'
+  loop: '{{ directories }}'
+  become: yes
+
+- name: 'Worker | Bootstrap | Worker Binaries'
+  get_url:
+    url: "https://storage.googleapis.com/kubernetes-release/release/{{ k8s_version }}/bin/linux/amd64/{{ item }}"
+    dest: "{{ k8s.binary_dir }}/{{ item }}"
+    mode: 0777
+  become: yes
+  loop: '{{ k8s.components }}'
+
+- name: 'Worker | Bootstrap | Additional Worker Binaries'
+  unarchive:
+    src: "{{ item }}"
+    dest: "{{ k8s.binary_dir }}"
+    #mode: 0777
+    remote_src: yes
+  become: yes
+  loop: '{{ k8s.additional_components }}'
+
+- name: 'Worker | Bootstrap | CNI Networking'
+  template:
+    src: '10-bridge.conf'
+    dest: '/etc/cni/net.d/10-bridge.conf'
+  become: yes
+
+- name: 'Worker | Bootstrap | Loopback network configuration file'
+  template:
+    src: '99-loopback.conf'
+    dest: '/etc/cni/net.d/99-loopback.conf'
+  become: yes
+
+- name: 'Worker | Bootstrap | Containerd configuration file'
+  template:
+    src: 'containerd_config.toml'
+    dest: '/etc/containerd/config.toml'
+  become: yes
+  notify:
+  - 'Worker | Containerd | Reload configuration'
+
+- name: 'Worker | Bootstrap | Systemd daemons'
+  meta: flush_handlers
+
+- name: 'Worker | Bootstrap | Kubelet configuration file'
+  template:
+    src: 'kubelet-config.yaml'
+    dest: '{{ kubelet_config }}'
+  become: yes
+
+- name: 'Worker | Bootstrap | Kubelet systemd service file'
+  template:
+    src: 'kubelet.service'
+    dest: '/etc/systemd/system/kubelet.service'
+  become: yes
+
+- name: 'Worker | Bootstrap | Kube-proxy configuration file'
+  template:
+    src: 'kube-proxy-config.yaml'
+    dest: '{{ kubeproxy_config }}'
+  become: yes
+
+- name: 'Worker | Bootstrap | Kube-proxy systemd service file'
+  template:
+    src: 'kube-proxy.service'
+    dest: '/etc/systemd/system/kube-proxy.service'
+  become: yes
+
+- name: 'Worker | Bootstrap | Systemd services runs'
+  systemd:
+    name: "{{ item }}"
+    state: restarted # TODO: notify
+    enabled: yes
+  become: yes
+  loop:
+  - kubelet
+  - kube-proxy

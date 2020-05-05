@@ -11,3 +11,7 @@ packages:
 - lvm2
 - containerd.io
 - keepalived
+
+pip_packages:
+- kubernetes
+- openshift

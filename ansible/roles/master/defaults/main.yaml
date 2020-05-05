@@ -48,3 +48,14 @@ etcd:
   url: 'https://github.com/etcd-io/etcd/releases/download/{{ etcd_verion }}/etcd-{{ etcd_verion }}-linux-amd64.tar.gz'
   binary: '/usr/bin/etcd'
   ctl_binary: '/usr/bin/etcdctl'
+
+k8s:
+  version: k8s_version
+  binary_dir: /usr/local/bin
+  scheduler_config_location: /etc/kube-scheduler.yaml
+  local_kubeconfig: '/tmp/kubeconfig.yaml'
+  components:
+  - "kube-apiserver"
+  - "kube-controller-manager"
+  - "kube-scheduler"
+  - "kubectl"

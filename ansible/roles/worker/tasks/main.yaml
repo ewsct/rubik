@@ -1,3 +1,6 @@
 ---
 - name: 'Worker | Certificates'
   include: certificates.yaml
+
+- name: 'Worker | Bootstrap'
+  include: bootstrap.yaml
