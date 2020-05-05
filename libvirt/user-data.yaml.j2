@@ -1,5 +1,10 @@
 #cloud-config
 
+package_upgrade: true
+
+packages:
+- python2
+
 users:
 - name: {{ username }}
   passwd: $6$smv3.tZIUdkx0VB6$J.jwba7sLO118oMBJu7nsJcDs230uLBxeR3zxtcx2FaiXTMhOHjaRBtEl.ZxqR526/9utsVL9mgCNyFtaxGHg.
