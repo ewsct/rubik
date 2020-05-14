@@ -5,3 +5,5 @@ libvirt/.workdir
 *.pem
 .vscode
 *.pyc
+
+*.retry
